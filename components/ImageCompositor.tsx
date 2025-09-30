@@ -102,54 +102,51 @@ export default function ImageCompositor(props: CompositorProps) {
       const LEFT_CARD_X = 960;
       const RIGHT_CARD_X = 1980;
 
-      // Symmetrical spacing: label is 50px below card top, so caption should be 50px above card bottom
-      const LABEL_OFFSET = 50; // Distance from card top to label baseline
-      const CAPTION_OFFSET = 50; // Distance from card bottom to caption baseline
-
       // Left card (Wi-Fi)
       ctx.save();
       ctx.shadowColor = 'transparent';
       
-      // Label - 50px from top
+      // Label - 50px from top (actually 90px to baseline)
       ctx.font = '500 56px Arial, sans-serif';
       ctx.fillStyle = '#1F2937';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
-      ctx.fillText('Wi-Fi', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + LABEL_OFFSET + 40);
+      ctx.fillText('Wi-Fi', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + 90);
       
       // QR code centered
       const qrX = LEFT_CARD_X + (CARD_WIDTH - 480) / 2;
       ctx.drawImage(wifiQRImg, qrX, CARD_Y + 140, 480, 480);
       
-      // Captions - symmetrical spacing from bottom (50px + text height)
+      // Caption line 1 - 50px + line spacing from bottom
       ctx.font = '500 42px Arial, sans-serif';
       ctx.fillStyle = '#374151';
-      ctx.fillText('Escanea a para conectarte', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - CAPTION_OFFSET - 42);
+      ctx.fillText('Escanea a para conectarte', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 94);
       
+      // Caption line 2 - 50px from bottom
       ctx.font = '500 36px Arial, sans-serif';
       ctx.fillStyle = '#4B5563';
-      ctx.fillText(props.ssid.replace('_', '-'), LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - CAPTION_OFFSET);
+      ctx.fillText(props.ssid.replace('_', '-'), LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 50);
       ctx.restore();
 
       // Right card (WhatsApp)
       ctx.save();
       ctx.shadowColor = 'transparent';
       
-      // Label - 50px from top
+      // Label - 50px from top (actually 90px to baseline)
       ctx.font = '500 56px Arial, sans-serif';
       ctx.fillStyle = '#1F2937';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
-      ctx.fillText('Ordena por WhatsApp', RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + LABEL_OFFSET + 40);
+      ctx.fillText('Ordena por WhatsApp', RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + 90);
       
       // QR code centered
       const whatsappQrX = RIGHT_CARD_X + (CARD_WIDTH - 480) / 2;
       ctx.drawImage(whatsappQRImg, whatsappQrX, CARD_Y + 140, 480, 480);
       
-      // Caption - symmetrical spacing from bottom
+      // Caption - 50px from bottom
       ctx.font = '500 36px Arial, sans-serif';
       ctx.fillStyle = '#4B5563';
-      ctx.fillText(props.venueName, RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - CAPTION_OFFSET);
+      ctx.fillText(props.venueName, RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 50);
       ctx.restore();
 
       // Footer
