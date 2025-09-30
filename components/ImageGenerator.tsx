@@ -81,7 +81,7 @@ export default function ImageGenerator({
       ctx.drawImage(canvas, 0, 0);
       ctx.filter = 'none';
 
-      // Vertical vignette
+      // Vertical vignette (stronger)
       const vignetteGradient = ctx.createLinearGradient(0, 0, 0, HEIGHT);
       vignetteGradient.addColorStop(0, 'rgba(0, 0, 0, 0.12)');
       vignetteGradient.addColorStop(0.11, 'rgba(0, 0, 0, 0)');
@@ -212,36 +212,37 @@ export default function ImageGenerator({
 
       // Left card - Wi-Fi
       ctx.save();
+      ctx.shadowColor = 'transparent'; // Remove shadow from card text
       
-      // Label at top
+      // Label at top - DARK TEXT
       ctx.font = '500 56px Inter, Arial, sans-serif';
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = '#1F2937'; // Dark gray/charcoal
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
       ctx.fillText('Wi-Fi', leftCardX + CARD_WIDTH / 2, CARD_Y + 90);
 
-      // QR Code centered with proper spacing from label
+      // QR Code - proper spacing from top
       const qrX = leftCardX + (CARD_WIDTH - QR_SIZE) / 2;
       const qrY = CARD_Y + 140;
       ctx.drawImage(wifiQRImg, qrX, qrY, QR_SIZE, QR_SIZE);
 
-      // Caption lines BELOW QR code with proper spacing
+      // Caption lines BELOW QR code - DARK TEXT
       ctx.font = '500 42px Inter, Arial, sans-serif';
-      ctx.fillStyle = '#FFFFFF';
-      ctx.textAlign = 'center';
+      ctx.fillStyle = '#374151'; // Medium dark gray
       ctx.fillText('Escanea para conectarte', leftCardX + CARD_WIDTH / 2, CARD_Y + 640);
       
       ctx.font = '500 36px Inter, Arial, sans-serif';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.fillText(ssid, leftCardX + CARD_WIDTH / 2, CARD_Y + 690);
+      ctx.fillStyle = '#4B5563'; // Slightly lighter gray
+      ctx.fillText(ssid, leftCardX + CARD_WIDTH / 2, CARD_Y + 684);
       ctx.restore();
 
       // Right card - WhatsApp
       ctx.save();
+      ctx.shadowColor = 'transparent';
       
-      // Label at top
+      // Label at top - DARK TEXT
       ctx.font = '500 56px Inter, Arial, sans-serif';
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = '#1F2937'; // Dark gray/charcoal
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
       ctx.fillText('Ordena por WhatsApp', rightCardX + CARD_WIDTH / 2, CARD_Y + 90);
@@ -250,10 +251,10 @@ export default function ImageGenerator({
       const whatsappQrX = rightCardX + (CARD_WIDTH - QR_SIZE) / 2;
       ctx.drawImage(whatsappQRImg, whatsappQrX, qrY, QR_SIZE, QR_SIZE);
 
-      // Venue name BELOW QR code
+      // Venue name BELOW QR code - DARK TEXT
       ctx.font = '500 36px Inter, Arial, sans-serif';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.fillText(venueName, rightCardX + CARD_WIDTH / 2, CARD_Y + 690);
+      ctx.fillStyle = '#4B5563'; // Medium gray
+      ctx.fillText(venueName, rightCardX + CARD_WIDTH / 2, CARD_Y + 684);
       ctx.restore();
 
       // Footer
