@@ -106,47 +106,47 @@ export default function ImageCompositor(props: CompositorProps) {
       ctx.save();
       ctx.shadowColor = 'transparent';
       
-      // Label - 50px from top (actually 90px to baseline)
+      // Label
       ctx.font = '500 56px Arial, sans-serif';
       ctx.fillStyle = '#1F2937';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
       ctx.fillText('Wi-Fi', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + 90);
       
-      // QR code centered
+      // QR code
       const qrX = LEFT_CARD_X + (CARD_WIDTH - 480) / 2;
       ctx.drawImage(wifiQRImg, qrX, CARD_Y + 140, 480, 480);
       
-      // Caption line 1 - 50px + line spacing from bottom
+      // Caption line 1 - 75px + line spacing from bottom
       ctx.font = '500 42px Arial, sans-serif';
       ctx.fillStyle = '#374151';
-      ctx.fillText('Escanea a para conectarte', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 94);
+      ctx.fillText('Escanea a para conectarte', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 119);
       
-      // Caption line 2 - 50px from bottom
+      // Caption line 2 - 75px from bottom
       ctx.font = '500 36px Arial, sans-serif';
       ctx.fillStyle = '#4B5563';
-      ctx.fillText(props.ssid.replace('_', '-'), LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 50);
+      ctx.fillText(props.ssid.replace('_', '-'), LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 75);
       ctx.restore();
 
       // Right card (WhatsApp)
       ctx.save();
       ctx.shadowColor = 'transparent';
       
-      // Label - 50px from top (actually 90px to baseline)
+      // Label
       ctx.font = '500 56px Arial, sans-serif';
       ctx.fillStyle = '#1F2937';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
       ctx.fillText('Ordena por WhatsApp', RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + 90);
       
-      // QR code centered
+      // QR code
       const whatsappQrX = RIGHT_CARD_X + (CARD_WIDTH - 480) / 2;
       ctx.drawImage(whatsappQRImg, whatsappQrX, CARD_Y + 140, 480, 480);
       
-      // Caption - 50px from bottom
+      // Caption - 75px from bottom
       ctx.font = '500 36px Arial, sans-serif';
       ctx.fillStyle = '#4B5563';
-      ctx.fillText(props.venueName, RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 50);
+      ctx.fillText(props.venueName, RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 75);
       ctx.restore();
 
       // Footer
