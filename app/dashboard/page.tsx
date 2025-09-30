@@ -1,15 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar, Plus, Eye, X, Download, Home, Search, Filter, Clock, CheckCircle2, Circle } from 'lucide-react';
+import { Calendar, Plus, Eye, X, Home, Search, Filter, Clock, CheckCircle2 } from 'lucide-react';
+import ImageCompositor from '@/components/ImageCompositor';
 
 export default function Dashboard() {
   const [showNewBooking, setShowNewBooking] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [previewData, setPreviewData] = useState<any>(null);
-  const [previewImageUrl, setPreviewImageUrl] = useState<string>('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [activeTab, setActiveTab] = useState('all');
   
   const [bookings, setBookings] = useState<any[]>([]);
   const [newBooking, setNewBooking] = useState({
@@ -45,43 +43,9 @@ export default function Dashboard() {
     });
   };
 
-  const handlePreview = async (data: any) => {
+  const handlePreview = (data: any) => {
     setPreviewData(data);
     setShowPreview(true);
-    setIsGenerating(true);
-
-    try {
-      const response = await fetch('/api/render', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          preferredName: data.preferredName,
-          guestType: data.guestType,
-          roomNumber: data.roomNumber,
-          ssid: 'Regatas_San Jose',
-          venueName: data.venueName,
-          venueWhatsApp: data.venueWhatsApp,
-        }),
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        setPreviewImageUrl(url);
-      }
-    } catch (error) {
-      console.error('Error generating preview:', error);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleDownload = () => {
-    if (!previewImageUrl) return;
-    const link = document.createElement('a');
-    link.href = previewImageUrl;
-    link.download = `welcome-room-${previewData.roomNumber}-4K.png`;
-    link.click();
   };
 
   const getStatusColor = (status: string) => {
@@ -92,7 +56,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
-      {/* Elegant Header */}
       <header className="bg-white border-b border-gray-200/60 backdrop-blur-xl bg-white/80 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-8 py-6">
           <div className="flex items-center justify-between">
@@ -162,23 +125,13 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Bookings Section */}
+        {/* Bookings */}
         <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm overflow-hidden">
           <div className="px-8 py-6 border-b border-gray-200/60 bg-gradient-to-r from-gray-50/50 to-transparent">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-bold text-gray-900">Bookings</h2>
                 <p className="text-sm text-gray-500 mt-1">Manage welcome screens for guest arrivals</p>
-              </div>
-              <div className="flex gap-3">
-                <button className="px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-2">
-                  <Search className="w-4 h-4" />
-                  <span className="text-sm font-medium">Search</span>
-                </button>
-                <button className="px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-2">
-                  <Filter className="w-4 h-4" />
-                  <span className="text-sm font-medium">Filter</span>
-                </button>
               </div>
             </div>
           </div>
@@ -190,7 +143,7 @@ export default function Dashboard() {
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">No bookings yet</h3>
               <p className="text-gray-500 mb-6 max-w-sm mx-auto">
-                Create your first booking to generate a personalized welcome screen for your guests
+                Create your first booking to generate a personalized welcome screen
               </p>
               <button
                 onClick={() => setShowNewBooking(true)}
@@ -223,8 +176,6 @@ export default function Dashboard() {
                         </span>
                         <span className="w-1 h-1 rounded-full bg-gray-300" />
                         <span>{booking.guestType}</span>
-                        <span className="w-1 h-1 rounded-full bg-gray-300" />
-                        <span>{booking.venueName}</span>
                       </div>
                     </div>
 
@@ -243,10 +194,10 @@ export default function Dashboard() {
         </div>
       </main>
 
-      {/* New Booking Modal - Premium Design */}
+      {/* New Booking Modal */}
       {showNewBooking && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full">
             <div className="px-8 py-6 border-b border-gray-200/60 bg-gradient-to-r from-gray-50/50 to-transparent">
               <div className="flex items-center justify-between">
                 <div>
@@ -262,15 +213,14 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="px-8 py-6 space-y-5 max-h-[calc(90vh-200px)] overflow-y-auto">
+            <div className="px-8 py-6 space-y-5">
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700">Room Number</label>
                 <input
                   type="text"
-                  placeholder="208"
                   value={newBooking.roomNumber}
                   onChange={(e) => setNewBooking({ ...newBooking, roomNumber: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none"
                 />
               </div>
 
@@ -281,7 +231,7 @@ export default function Dashboard() {
                   placeholder="e.g., Familia Sánchez"
                   value={newBooking.preferredName}
                   onChange={(e) => setNewBooking({ ...newBooking, preferredName: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none"
                 />
               </div>
 
@@ -290,7 +240,7 @@ export default function Dashboard() {
                 <select
                   value={newBooking.guestType}
                   onChange={(e) => setNewBooking({ ...newBooking, guestType: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none"
                 >
                   <option>Single</option>
                   <option>Couple</option>
@@ -306,7 +256,7 @@ export default function Dashboard() {
                     type="date"
                     value={newBooking.startDate}
                     onChange={(e) => setNewBooking({ ...newBooking, startDate: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none"
                   />
                 </div>
                 <div className="space-y-2">
@@ -315,7 +265,7 @@ export default function Dashboard() {
                     type="date"
                     value={newBooking.endDate}
                     onChange={(e) => setNewBooking({ ...newBooking, endDate: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none"
                   />
                 </div>
               </div>
@@ -325,7 +275,7 @@ export default function Dashboard() {
                 <select
                   value={newBooking.venueName}
                   onChange={(e) => setNewBooking({ ...newBooking, venueName: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pacific focus:border-transparent outline-none"
                 >
                   <option>Zsa Zsa / Playa 3</option>
                   <option>Beach Bar</option>
@@ -338,7 +288,7 @@ export default function Dashboard() {
               <button
                 onClick={() => handlePreview(newBooking)}
                 disabled={!newBooking.preferredName}
-                className="px-6 py-3 border-2 border-pacific text-pacific rounded-xl font-medium hover:bg-pacific hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-6 py-3 border-2 border-pacific text-pacific rounded-xl font-medium hover:bg-pacific hover:text-white transition-all disabled:opacity-50 flex items-center gap-2"
               >
                 <Eye className="w-5 h-5" />
                 Preview
@@ -346,7 +296,7 @@ export default function Dashboard() {
               <button
                 onClick={handleCreateBooking}
                 disabled={!newBooking.preferredName || !newBooking.startDate || !newBooking.endDate}
-                className="px-6 py-3 bg-gradient-to-r from-pacific to-navy text-white rounded-xl font-medium shadow-lg shadow-pacific/25 hover:shadow-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 bg-gradient-to-r from-pacific to-navy text-white rounded-xl font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all disabled:opacity-50"
               >
                 Create Booking
               </button>
@@ -355,8 +305,8 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Preview Modal - Premium Design */}
-      {showPreview && (
+      {/* Preview Modal */}
+      {showPreview && previewData && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-3xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
             <div className="px-8 py-6 border-b border-gray-200/60">
@@ -367,7 +317,7 @@ export default function Dashboard() {
                 </div>
                 <button
                   onClick={() => setShowPreview(false)}
-                  className="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center transition-colors"
+                  className="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center"
                 >
                   <X className="w-5 h-5 text-gray-500" />
                 </button>
@@ -375,30 +325,14 @@ export default function Dashboard() {
             </div>
 
             <div className="p-8 max-h-[calc(90vh-200px)] overflow-y-auto">
-              {isGenerating ? (
-                <div className="flex flex-col items-center justify-center h-96 space-y-4">
-                  <div className="w-16 h-16 border-4 border-pacific/20 border-t-pacific rounded-full animate-spin"></div>
-                  <p className="text-gray-600 font-medium">Generating premium 4K image...</p>
-                  <p className="text-sm text-gray-400">This may take a few seconds</p>
-                </div>
-              ) : previewImageUrl ? (
-                <div className="space-y-6">
-                  <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-xl">
-                    <img src={previewImageUrl} alt="Preview" className="w-full" />
-                  </div>
-                  <button
-                    onClick={handleDownload}
-                    className="w-full px-6 py-4 bg-gradient-to-r from-pacific to-navy text-white rounded-xl font-semibold shadow-lg shadow-pacific/25 hover:shadow-xl hover:scale-[1.01] transition-all flex items-center justify-center gap-3"
-                  >
-                    <Download className="w-5 h-5" />
-                    Download 4K Image
-                  </button>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-red-600 font-medium">Failed to generate image</p>
-                </div>
-              )}
+              <ImageCompositor
+                preferredName={previewData.preferredName}
+                guestType={previewData.guestType}
+                roomNumber={previewData.roomNumber}
+                ssid="Regatas_San Jose"
+                venueName={previewData.venueName}
+                venueWhatsApp={previewData.venueWhatsApp}
+              />
             </div>
           </div>
         </div>
