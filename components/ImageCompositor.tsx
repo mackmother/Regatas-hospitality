@@ -34,7 +34,6 @@ export default function ImageCompositor(props: CompositorProps) {
     canvas.height = HEIGHT;
 
     try {
-      // Load Photoshop template
       const templateImg = new Image();
       await new Promise((resolve, reject) => {
         templateImg.onload = resolve;
@@ -42,10 +41,8 @@ export default function ImageCompositor(props: CompositorProps) {
         templateImg.src = '/backgrounds/default-beach.jpg';
       });
 
-      // Draw template
       ctx.drawImage(templateImg, 0, 0, WIDTH, HEIGHT);
 
-      // Truncate name
       let displayName = props.preferredName;
       if (displayName.length > 24) {
         if (props.guestType === 'Family' || props.guestType === 'Friends') {
@@ -56,7 +53,7 @@ export default function ImageCompositor(props: CompositorProps) {
         }
       }
 
-      // Title text
+      // Title
       ctx.save();
       ctx.font = 'bold 164px Arial, sans-serif';
       ctx.fillStyle = '#FFFFFF';
@@ -99,72 +96,71 @@ export default function ImageCompositor(props: CompositorProps) {
         new Promise(r => { whatsappQRImg.onload = r; whatsappQRImg.src = whatsappQR; })
       ]);
 
-      // Card measurements from your template
       const CARD_WIDTH = 900;
       const CARD_HEIGHT = 720;
       const CARD_Y = 980;
       const LEFT_CARD_X = 960;
       const RIGHT_CARD_X = 1980;
 
+      // Symmetrical spacing: label is 50px below card top, so caption should be 50px above card bottom
+      const LABEL_OFFSET = 50; // Distance from card top to label baseline
+      const CAPTION_OFFSET = 50; // Distance from card bottom to caption baseline
+
       // Left card (Wi-Fi)
       ctx.save();
       ctx.shadowColor = 'transparent';
       
-      // Label
+      // Label - 50px from top
       ctx.font = '500 56px Arial, sans-serif';
       ctx.fillStyle = '#1F2937';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
-      ctx.fillText('Wi-Fi', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + 90);
+      ctx.fillText('Wi-Fi', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + LABEL_OFFSET + 40);
       
       // QR code centered
       const qrX = LEFT_CARD_X + (CARD_WIDTH - 480) / 2;
       ctx.drawImage(wifiQRImg, qrX, CARD_Y + 140, 480, 480);
       
-      // Caption line 1
+      // Captions - symmetrical spacing from bottom (50px + text height)
       ctx.font = '500 42px Arial, sans-serif';
       ctx.fillStyle = '#374151';
-      ctx.fillText('Escanea a para conectarte', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 110);
+      ctx.fillText('Escanea a para conectarte', LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - CAPTION_OFFSET - 42);
       
-      // Caption line 2
       ctx.font = '500 36px Arial, sans-serif';
       ctx.fillStyle = '#4B5563';
-      ctx.fillText(props.ssid.replace('_', '-'), LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 70);
+      ctx.fillText(props.ssid.replace('_', '-'), LEFT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - CAPTION_OFFSET);
       ctx.restore();
 
       // Right card (WhatsApp)
       ctx.save();
       ctx.shadowColor = 'transparent';
       
-      // Label
+      // Label - 50px from top
       ctx.font = '500 56px Arial, sans-serif';
       ctx.fillStyle = '#1F2937';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
-      ctx.fillText('Ordena por WhatsApp', RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + 90);
+      ctx.fillText('Ordena por WhatsApp', RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + LABEL_OFFSET + 40);
       
       // QR code centered
       const whatsappQrX = RIGHT_CARD_X + (CARD_WIDTH - 480) / 2;
       ctx.drawImage(whatsappQRImg, whatsappQrX, CARD_Y + 140, 480, 480);
       
-      // Caption
+      // Caption - symmetrical spacing from bottom
       ctx.font = '500 36px Arial, sans-serif';
       ctx.fillStyle = '#4B5563';
-      ctx.fillText(props.venueName, RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - 70);
+      ctx.fillText(props.venueName, RIGHT_CARD_X + CARD_WIDTH / 2, CARD_Y + CARD_HEIGHT - CAPTION_OFFSET);
       ctx.restore();
 
       // Footer
       ctx.save();
       ctx.shadowColor = 'transparent';
-      
-      // URL
       ctx.font = '500 48px Arial, sans-serif';
       ctx.fillStyle = '#FFFFFF';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
       ctx.fillText(`regatas.tv/r/${props.roomNumber}`, WIDTH / 2, 2000);
       
-      // Logo
       ctx.font = 'bold 72px Arial, sans-serif';
       ctx.textAlign = 'right';
       ctx.globalAlpha = 0.92;
