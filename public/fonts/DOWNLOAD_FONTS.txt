@@ -1,0 +1,7 @@
+Download Inter font from: https://fonts.google.com/specimen/Inter
+
+Required files:
+1. Inter-Bold.ttf
+2. Inter-Medium.ttf
+
+Place them in this folder.
