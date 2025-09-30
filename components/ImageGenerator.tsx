@@ -76,7 +76,7 @@ export default function ImageGenerator({
       
       ctx.drawImage(bgImg, offsetX, offsetY, drawWidth, drawHeight);
 
-      // Apply blur effect (using filter)
+      // Apply blur effect
       ctx.filter = 'blur(2.5px)';
       ctx.drawImage(canvas, 0, 0);
       ctx.filter = 'none';
@@ -100,11 +100,10 @@ export default function ImageGenerator({
 
       // Typography - BIENVENIDOS
       ctx.save();
-      ctx.font = 'bold 164px Inter, sans-serif';
+      ctx.font = 'bold 164px Inter, Arial, sans-serif';
       ctx.fillStyle = '#FFFFFF';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
-      ctx.letterSpacing = '3.28px';
       ctx.shadowColor = 'rgba(0, 0, 0, 0.22)';
       ctx.shadowBlur = 4;
       ctx.shadowOffsetX = 2;
@@ -124,7 +123,7 @@ export default function ImageGenerator({
       }
 
       ctx.save();
-      ctx.font = 'bold 118px Inter, sans-serif';
+      ctx.font = 'bold 118px Inter, Arial, sans-serif';
       ctx.fillStyle = '#FFFFFF';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
@@ -213,44 +212,59 @@ export default function ImageGenerator({
 
       // Left card - Wi-Fi
       ctx.save();
-      ctx.font = '500 56px Inter, sans-serif';
+      
+      // Label at top
+      ctx.font = '500 56px Inter, Arial, sans-serif';
       ctx.fillStyle = '#FFFFFF';
       ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
       ctx.fillText('Wi-Fi', leftCardX + CARD_WIDTH / 2, CARD_Y + 90);
 
+      // QR Code centered with proper spacing from label
       const qrX = leftCardX + (CARD_WIDTH - QR_SIZE) / 2;
       const qrY = CARD_Y + 140;
       ctx.drawImage(wifiQRImg, qrX, qrY, QR_SIZE, QR_SIZE);
 
-      ctx.font = '500 42px Inter, sans-serif';
+      // Caption lines BELOW QR code with proper spacing
+      ctx.font = '500 42px Inter, Arial, sans-serif';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.textAlign = 'center';
       ctx.fillText('Escanea para conectarte', leftCardX + CARD_WIDTH / 2, CARD_Y + 640);
-      ctx.font = '500 36px Inter, sans-serif';
-      ctx.fillText(ssid, leftCardX + CARD_WIDTH / 2, CARD_Y + 684);
+      
+      ctx.font = '500 36px Inter, Arial, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.fillText(ssid, leftCardX + CARD_WIDTH / 2, CARD_Y + 690);
       ctx.restore();
 
       // Right card - WhatsApp
       ctx.save();
-      ctx.font = '500 56px Inter, sans-serif';
+      
+      // Label at top
+      ctx.font = '500 56px Inter, Arial, sans-serif';
       ctx.fillStyle = '#FFFFFF';
       ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
       ctx.fillText('Ordena por WhatsApp', rightCardX + CARD_WIDTH / 2, CARD_Y + 90);
 
+      // QR Code
       const whatsappQrX = rightCardX + (CARD_WIDTH - QR_SIZE) / 2;
       ctx.drawImage(whatsappQRImg, whatsappQrX, qrY, QR_SIZE, QR_SIZE);
 
-      ctx.font = '500 36px Inter, sans-serif';
-      ctx.fillText(venueName, rightCardX + CARD_WIDTH / 2, CARD_Y + 684);
+      // Venue name BELOW QR code
+      ctx.font = '500 36px Inter, Arial, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.fillText(venueName, rightCardX + CARD_WIDTH / 2, CARD_Y + 690);
       ctx.restore();
 
       // Footer
       ctx.save();
-      ctx.font = '500 48px Inter, sans-serif';
+      ctx.font = '500 48px Inter, Arial, sans-serif';
       ctx.fillStyle = '#FFFFFF';
       ctx.textAlign = 'center';
       ctx.fillText(`regatas.tv/r/${roomNumber}`, WIDTH / 2, 2000);
       
-      // Logo text
-      ctx.font = 'bold 72px Inter, sans-serif';
+      // Logo text (bottom right)
+      ctx.font = 'bold 72px Inter, Arial, sans-serif';
       ctx.textAlign = 'right';
       ctx.globalAlpha = 0.92;
       ctx.fillText('regatas', 3600, 2040);
@@ -291,7 +305,7 @@ export default function ImageGenerator({
         onClick={downloadImage}
         className="w-full px-4 py-2 bg-pacific text-white rounded-lg hover:bg-navy transition-colors"
       >
-        Download 4K Image
+        Download 4K Image (3840x2160)
       </button>
     </div>
   );
